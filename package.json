@@ -1,0 +1,15 @@
+{
+    "name": "cumulocity_openhab_integration",
+    "version": "1.0.0",
+    "description": "Dockerized Cumulocity IoT to Openhab Integration",
+    "author": "Marco Biegel",
+    "main": "main.js",
+    "scripts": {
+      "start": "node main.js"
+    },
+    "dependencies": {
+      "ws": "latest",
+      "axios": "latest",
+      "config": "latest"
+    }
+  }

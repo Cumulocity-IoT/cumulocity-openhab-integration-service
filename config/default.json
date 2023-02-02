@@ -1,0 +1,18 @@
+{
+    "c8y": {
+        "c8yUrl": "tenant.cumulocity.com",
+        "c8yAuthToken": "Basic ...",
+        "subscriberName": "openhab",
+        "subscriptionName": "exampleSubscriptionName",
+        "subscriptionDeviceId": "52616633",
+        "subscriptionApis": "measurements,events",
+        "subscriptionTypeFilter": "c8y_Notification_Temperature",
+        "subscriptionFragmentsToCopy": "c8y_Notification_Temperature,c8y_Notification_Temperature2",
+        "tokenExpireTime": "0"
+    },
+    "o5b": {
+        "url": "http://192.168.30.5",
+        "port": "8081",
+        "authToken": "Basic ..."
+    }
+}

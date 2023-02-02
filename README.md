@@ -1,125 +1,55 @@
-# PLEASE REPLACE THE PART BELOW WITH YOUR OWN CONTENT !!!
+# Intro
 
----
+This project is an node.js based event integration service for Cumulocity IoT into OpenHAB. It makes use of the Cumulocity IoT Notification API and creates/updates items in OpenHAB via its REST API.
 
-# Template for Cumulocity IoT OS Repos
+# Content
+- [Intro](#intro)
+- [Content](#content)
+- [Solution components](#solution-components)
+- [Set Configuration](#set-configuration)
+- [Start Service](#start-service)
 
-This is a template repo for Cumulocity-IoT related open-source repos at SoftwareAG Organization. It contains basic guidelines for
- - Naming the Repo
- - FOSS Licensing
- - Topics
- - README.md structure
- - GitHub Setting
+There is one device being created and the decoded measurements will be attached.
 
-## How to use this template
+# Solution components
 
-Click here [Use this template](https://github.com/SoftwareAG/cumulocity-iot-template/generate) to create a new repo based on this template.
+The service consists of 3 components and one configuration file:
+* `./main.js` Initiates websocket connection to Cumulocity IoT Pulsar
+* `./c8y-subscription.js` Contains functions for initiating the websocket connection including token retrieval and subscription creation. See [documentation](https://cumulocity.com/guides/reference/notifications/) for more details.
+* `./o5b-forwarder.js` Contains functions for forwarding data to OpenHAB.
+* `./config/default.json` Contains all configurations.
 
-## Naming the Repo
+# Set Configuration
 
-* Use lower case names. Combine words with a "-". Avoid using camelCase or other separators.
-* Follow the pattern: **[productname]-[reponame]-[productfeature]**.
-* Examples for good repo names: "cumulocity-kpi-trend-widget", "cumulocity-hono-microservice"
-* Examples for bad repo names: "C8YPythonAgent", "EPLApps_Samples"
+If there is already a valid subscription you want to use in place, your just have to set following config parameters:
+*  c8y.c8yUrl: Cumulocity IoT Tenant Url without http(s)               
+*  c8y.c8yAuthToken: Cumulocity IoT Basic Auth Header Token
+*  c8y.subscriberName: Configurable name of your subscriber
+*  c8y.subscriptionName: Configurable name of your subscription
+*  o5b.url: Full Url of OpenHAB
+*  o5b.port: Port of OpenHAB
+*  o5b.authToken: OpenHAB Basic Auth Header Token
 
+If you want to create a subscripton you have to set all properties:
 
-Please make sure that you add a meaningful description to your repo.
+*  c8y.subscriptionDeviceId: Device Id oder * for device scope of subscription
+*  c8y.subscriptionApis: APIs of subscription, eg measurements or events 
+*  c8y.subscriptionTypeFilter: Managed Object Types, which should be included
+*  c8y.subscriptionFragmentsToCopy: Custom fragments, which should be copied
+*  c8y.tokenExpireTime: Subscription token validity time
 
-## FOSS Licensing & Copyright
+For more details also see https://cumulocity.com/api/core/10.15.0/#operation/postNotificationSubscriptionResource
 
-### License
-We strongly suggest that you use the [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0).
-If you use this repo as a template the license will be automatically applied to your repo.
+# Start Service
 
-If you don't use this template you should select the Apache License on repo creation:
+Install required node dependencies via npm: ws, axios, config
 
-![img_2.png](img_2.png)
+Just run node ./main inside root directory. For every incoming measurement fragment.series combination per device an item c8y_{{deviceId}}_{{fragment}}_{{series}} in OpenHAB will be created and/or updated accordingly.
 
-If you use open-source 3rd Party Software please check the [license compatibility](https://joinup.ec.europa.eu/collection/eupl/solution/joinup-licensing-assistant/jla-compatibility-checker) 
-
-### Copyright Header
-
-Each file that contains code from yourself should contain a copyright header in the following format:
-````
-Copyright (c) 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA,
-and/or its subsidiaries and/or its affiliates and/or their licensors.
-
-SPDX-License-Identifier: Apache-2.0
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-     http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-````
-
-## Topics
-
-For Cumulocity IoT content please add the topics
-
-* cumulocity-iot
-* iot-analytics
-
-Also add one or multiple topics of the following categories:
-* 'agent' or 'cumulocity-agent'
-* 'webapp' or 'cumulocity-webapp'
-* 'widget' or 'cumulocity-widget'
-* 'client' or 'cumulocity-client'
-* 'cli' or 'cumulocity-cli'
-* 'microservice' or 'cumulocity-microservice'
-* 'example' or 'cumulocity-example'
-* 'tutorial' or 'cumulocity-tutorial'
-* 'simulator' or 'cumulocity-simulator'
-* 'extension' or 'cumulocity-extension'
-* 'documentation' or 'cumulocity-documentation'
-
-Beside that you should add additional topics like 'iot' or others matchen the content of your repo.
-
-## README structure
-
-The README.md should be structured in the following way:
-
-1. Overview about the Repo / Component
-2. Installation
-3. Run / Quick Start
-4. Build
-5. (opt) Release Notes
-6. (opt) Contributing Guidelines (either part of the README or in a separate CONTRIBUTING.md)
-7. Footer to TechCommunity
-
-Please always add the following footer to your README.md
-
----
+------------------------------
 
 These tools are provided as-is and without warranty or support. They do not constitute part of the Software AG product suite. Users are free to use, fork and modify them, subject to the license agreement. While Software AG welcomes contributions, we cannot guarantee to include every contribution in the master project.
+_____________________
+For more information you can Ask a Question in the [TECHcommunity Forums](https://tech.forums.softwareag.com/tags/c/forum/1/cumulocity-iot).
 
-For more information you can Ask a Question in the [TECH Community Forums](https://tech.forums.softwareag.com/tag/Cumulocity-IoT).
-
-Contact us at [TECHcommunity](mailto:Communities@softwareag.com?subject=Github/SoftwareAG) if you have any questions.
-
----
-
-##Github Settings
-
-There are multiple settings you can make use of in your repository.
-First of all we suggest to enable the Code Security and analysis functionality which includes a [Dependency graph](https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/about-the-dependency-graph), [Dependabot alerts](https://docs.github.com/en/code-security/dependabot/dependabot-alerts/about-dependabot-alerts) and [Dependabot security updates](https://docs.github.com/en/code-security/dependabot/dependabot-security-updates/about-dependabot-security-updates).
-
-![img.png](img.png)
-
-# Questions about this template
-
-If you have any questions or suggestions regarding this template please create an [issue](https://github.com/SoftwareAG/cumulocity-iot-template/issues/new)
-
----
-# PLEASE REPLACE THE PART ABOVE WITH YOUR OWN CONTENT !!!
-
-
-
-
+You can find additional information in the [Software AG TECHcommunity](https://tech.forums.softwareag.com/tag/cumulocity-iot).
